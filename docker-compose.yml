@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: jira_todo_api
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongo:27017/jira-todo-app
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRE=${JWT_EXPIRE}
+    ports:
+      - "5001:5000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:latest
+    container_name: jira_todo_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
