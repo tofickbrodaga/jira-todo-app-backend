@@ -9,6 +9,83 @@ const generateToken = (id) => {
   });
 };
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - username
+ *         - email
+ *         - password
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Уникальный идентификатор пользователя
+ *         username:
+ *           type: string
+ *           description: Имя пользователя
+ *         email:
+ *           type: string
+ *           description: Email пользователя
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Дата создания
+ *     UserInput:
+ *       type: object
+ *       properties:
+ *         username:
+ *           type: string
+ *         email:
+ *           type: string
+ *         password:
+ *           type: string
+ *           format: password
+ *     LoginInput:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *         password:
+ *           type: string
+ *           format: password
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Аутентификация и управление пользователями
+ */
+
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Регистрация нового пользователя
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserInput'
+ *     responses:
+ *       201:
+ *         description: Пользователь успешно зарегистрирован
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: Неверные данные или пользователь уже существует
+ */
+
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -46,6 +123,32 @@ router.post('/register', async (req, res) => {
     res.status(500).json({ message: 'Ошибка сервера', error: error.message });
   }
 });
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Вход пользователя в систему
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginInput'
+ *     responses:
+ *       200:
+ *         description: Успешный вход
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: Неверные учетные данные
+ */
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
